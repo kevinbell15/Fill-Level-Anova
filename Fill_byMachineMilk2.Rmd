@@ -1,0 +1,22 @@
+# Create boxplot of machine levels
+boxplot(Fill_byMachine,ymachine='Fill_Level',xmachine='Machine_Type')
+
+#Use stack to prepare data for anova
+stFill_byMachine<-stack(Fill_byMachine)
+names(stFill_byMachine)<-c('Fill_Level','Machine_Type')
+
+# Call the function 
+stFill_byMachine
+
+#Preform ANOVA analysis on the data to test the hypothesis Ho: M1 = M2 = M3 = M4
+av1<-aov(Fill_Level~Machine_Type,data=stFill_byMachine)
+summary(av1)
+#The p-value =.001 There is evidence that the mean fill is not equal among groups. Reject Ho
+
+#Perform post hoc test to show differences between each individual machine
+tk<-TukeyHSD(av1)
+
+#Call the function
+tk
+
+# At the 5% significant level Machines(3 and 1) and (4 and 3) are significantly different from each other so we Reject Ho. For Machines (2 and 3), (4 and 1), (3 and 2) and (4 and 2) they are not significantly different so we Do not Reject Ho. 
